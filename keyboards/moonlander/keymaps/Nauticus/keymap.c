@@ -18,7 +18,6 @@
 
 #include QMK_KEYBOARD_H
 #include "version.h"
-#include "oneshot.h"
 
 #define L_NAV LT(NAV, KC_ENT)
 
@@ -26,13 +25,11 @@ enum layers {
     BASE,  // default layer
     NAV,
     QWERTY,
+    FUN
 };
 
 enum custom_keycodes {
-    OS_SHFT = SAFE_RANGE,
-    OS_CTRL,
-    OS_ALT,
-    OS_CMD,
+    OS_NOOP = SAFE_RANGE,
     OS_FST = KC_DLR,
     OS_N1 = KC_PLUS,
     OS_N2 = KC_LBRC,
@@ -47,7 +44,19 @@ enum custom_keycodes {
     OS_LST = KC_EXLM,
     OS_RB1 = KC_AT,
     OS_RB2 = KC_BSLS,
-    OS_MEH,
+};
+
+enum combo_events {
+    OS_CW,
+    COMBO_LENGTH
+};
+
+uint16_t COMBO_LEN = COMBO_LENGTH;
+
+const uint16_t PROGMEM caps_word_combo[] = {KC_M, KC_W, COMBO_END};
+
+combo_t key_combos[] = {
+    [OS_CW] = COMBO(caps_word_combo, CW_TOGG),
 };
 
 const key_override_t n1_plus_override = ko_make_basic(MOD_MASK_SHIFT, OS_N1, KC_1);
@@ -86,84 +95,79 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_moonlander(
-        OS_FST,  OS_N1,   OS_N2,   OS_N3,   OS_N4,   OS_N5,  _______,            _______, OS_N6,   OS_N7,   OS_N8,   OS_N9,   OS_N0,   OS_LST,
+        OS_FST,  OS_N1,   OS_N2,   OS_N3,   OS_N4,   OS_N5,  TG(QWERTY),         _______, OS_N6,   OS_N7,   OS_N8,   OS_N9,   OS_N0,   OS_LST,
         KC_TAB,  KC_SCLN, KC_COMMA,KC_DOT,  KC_P,    KC_Y,   _______,            _______, KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
         KC_ESC,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,   _______,            _______, KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
         KC_LSFT, KC_QUOT, KC_Q,    KC_J,    KC_K,    KC_X,                                KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
-        _______, KC_GRV,  CW_TOGG, KC_LEFT, KC_RGHT,         KC_LCTL,            KC_RCTL,          KC_DOWN, KC_UP,   OS_RB1,  OS_RB2,  _______,
+        MO(FUN), KC_GRV,  CW_TOGG, KC_LEFT, KC_RGHT,         KC_LCTL,            KC_RCTL,          KC_DOWN, KC_UP,   OS_RB1,  OS_RB2,  MO(FUN),
                                             KC_BSPC, KC_DEL, KC_LGUI,            KC_RGUI, L_NAV,   KC_SPC
     ),
     [NAV] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, KC_PGUP, KC_HOME, KC_UP,   KC_END,  _______, _______,           _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______,           _______, _______, OS_CTRL, OS_SHFT, OS_ALT,  OS_CMD,  _______,
-        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, OS_MEH,  _______,
+        _______, KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______,           _______, _______, OSM(MOD_LCTL),  OSM(MOD_LSFT),  OSM(MOD_LALT),  OSM(MOD_LGUI),  _______,
+        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, OSM(MOD_LCTL | MOD_LALT | MOD_LGUI),  _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
+    [QWERTY] = LAYOUT_moonlander(
+        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    _______,           _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+        KC_DEL,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    _______,           _______, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+        KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    _______,           _______, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+        _______, KC_GRV,  _______, KC_LEFT, KC_RGHT,          _______,           _______,          KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, _______,
+                                            _______, _______, _______,           _______,  _______,  _______
+    ),
+    [FUN] = LAYOUT_moonlander(
+        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F11,            KC_F12,  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, KC_MPRV, KC_MNXT,          _______,           _______,          KC_VOLD, KC_VOLU, _______, _______, _______,
+                                            _______, _______, _______,           KC_MRWD, KC_MFFD, KC_MPLY
+    ),
 };
 
-bool is_oneshot_cancel_key(uint16_t keycode) {
-    if (keycode == KC_ESC) {
-        return true;
-    }
-    return false;
-}
-
-bool is_oneshot_ignored_key(uint16_t keycode) {
-    switch (keycode) {
-        case KC_LSFT:
-        case KC_RSFT:
-        case OS_SHFT:
-        case OS_CTRL:
-        case OS_ALT:
-        case OS_CMD:
-        case L_NAV:
-            return true;
-        default:
-            return false;
-    }
-}
+// [EXAMPLE] = LAYOUT_moonlander(
+//     _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+//     _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+//     _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+//     _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+//     _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
+//                                         _______, _______, _______,           _______, _______, _______
+// ),
 
 void keyboard_post_init_user(void) {
     rgblight_disable_noeeprom();
     rgb_matrix_disable();
 }
 
-oneshot_state os_shft_state = os_up_unqueued;
-oneshot_state os_ctrl_state = os_up_unqueued;
-oneshot_state os_alt_state = os_up_unqueued;
-oneshot_state os_cmd_state = os_up_unqueued;
-oneshot_state os_meh_state = os_up_unqueued;
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    update_oneshot(
-        &os_shft_state, MOD_MASK_SHIFT, OS_SHFT,
-        keycode, record
-    );
-
-    update_oneshot(
-        &os_ctrl_state, MOD_MASK_CTRL, OS_CTRL,
-        keycode, record
-    );
-
-    update_oneshot(
-        &os_alt_state, MOD_MASK_ALT, OS_ALT,
-        keycode, record
-    );
-
-    update_oneshot(
-        &os_cmd_state, MOD_MASK_GUI, OS_CMD,
-        keycode, record
-    );
-
-    // update_oneshot(
-    //     &os_meh_state, MOD_MASK_CAG, OS_MEH,
-    //     keycode, record
-    // );
-
     return true;
-}
+};
+
+// caps word setup
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Keycodes that continue Caps Word, with shift applied.
+        case KC_A ... KC_Z:
+            add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
+            return true;
+
+        // Keycodes that continue Caps Word, without shifting.
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case KC_UNDS:
+        case KC_MINS:
+        case KC_LSFT:
+        case KC_RSFT:
+            return true;
+
+        default:
+            return false;  // Deactivate Caps Word.
+    }
+};
 
 // layer_state_t layer_state_set_user(layer_state_t state) {
 //     switch (get_highest_layer(state)) {
