@@ -1,3 +1,5 @@
 KEY_OVERRIDE_ENABLE = yes
 CAPS_WORD_ENABLE = yes
+CONSOLE_ENABLE = yes
 COMBO_ENABLE = yes
+SRC += oneshot.c

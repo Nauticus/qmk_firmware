@@ -18,6 +18,9 @@
 
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "oneshot.h"
+#include "timer.h"
+#include "print.h"
 
 #define L_NAV LT(NAV, KC_ENT)
 
@@ -25,7 +28,8 @@ enum layers {
     BASE,  // default layer
     NAV,
     QWERTY,
-    FUN
+    FUN,
+    MOUSE,
 };
 
 enum custom_keycodes {
@@ -44,6 +48,7 @@ enum custom_keycodes {
     OS_LST = KC_EXLM,
     OS_RB1 = KC_AT,
     OS_RB2 = KC_BSLS,
+    OS_TEST,
 };
 
 enum combo_events {
@@ -95,12 +100,12 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_moonlander(
-        OS_FST,  OS_N1,   OS_N2,   OS_N3,   OS_N4,   OS_N5,  TG(QWERTY),         _______, OS_N6,   OS_N7,   OS_N8,   OS_N9,   OS_N0,   OS_LST,
-        KC_TAB,  KC_SCLN, KC_COMMA,KC_DOT,  KC_P,    KC_Y,   _______,            _______, KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
-        KC_ESC,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,   _______,            _______, KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
-        KC_LSFT, KC_QUOT, KC_Q,    KC_J,    KC_K,    KC_X,                                KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
-        MO(FUN), KC_GRV,  CW_TOGG, KC_LEFT, KC_RGHT,         KC_LCTL,            KC_RCTL,          KC_DOWN, KC_UP,   OS_RB1,  OS_RB2,  MO(FUN),
-                                            KC_BSPC, KC_DEL, KC_LGUI,            KC_RGUI, L_NAV,   KC_SPC
+        OS_FST,  OS_N1,   OS_N2,   OS_N3,   OS_N4,   OS_N5,      TG(QWERTY),         _______, OS_N6,   OS_N7,   OS_N8,   OS_N9,   OS_N0,   OS_LST,
+        KC_TAB,  KC_SCLN, KC_COMMA,KC_DOT,  KC_P,    KC_Y,       _______,            _______, KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
+        KC_ESC,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,       _______,            _______, KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
+        KC_LSFT, KC_QUOT, KC_Q,    KC_J,    KC_K,    KC_X,                                    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
+        MO(FUN), KC_GRV,  CW_TOGG, KC_LEFT, KC_RGHT,             KC_LCTL,            KC_RALT,          KC_DOWN, KC_UP,   OS_RB1,  OS_RB2,  MO(FUN),
+                                            KC_BSPC, LT(MOUSE, KC_DEL), KC_LGUI,            KC_RGUI, L_NAV,   KC_SPC
     ),
     [NAV] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
@@ -126,6 +131,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, KC_MPRV, KC_MNXT,          _______,           _______,          KC_VOLD, KC_VOLU, _______, _______, _______,
                                             _______, _______, _______,           KC_MRWD, KC_MFFD, KC_MPLY
     ),
+    [MOUSE] = LAYOUT_moonlander(
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, KC_WH_U, _______, _______, _______,           _______, _______, _______, KC_MS_U, _______, _______, _______,
+        _______, _______, KC_WH_L, KC_WH_D, KC_WH_R, _______, _______,           _______, _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
+        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
+                                            _______, _______, _______,           _______, KC_MS_BTN2, KC_MS_BTN1
+    ),
 };
 
 // [EXAMPLE] = LAYOUT_moonlander(
@@ -140,10 +153,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void keyboard_post_init_user(void) {
     rgblight_disable_noeeprom();
     rgb_matrix_disable();
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    return true;
+    debug_enable=true;
 };
 
 // caps word setup
