@@ -19,8 +19,8 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 #include "oneshot.h"
-#include "timer.h"
-#include "print.h"
+// #include "timer.h"
+// #include "print.h"
 
 #define L_NAV LT(NAV, KC_ENT)
 
@@ -133,9 +133,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [MOUSE] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, KC_WH_U, _______, _______, _______,           _______, _______, _______, KC_MS_U, _______, _______, _______,
-        _______, _______, KC_WH_L, KC_WH_D, KC_WH_R, _______, _______,           _______, _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
-        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+        _______, KC_ACL2, _______, KC_WH_U, _______, _______, _______,           _______, _______, _______, KC_MS_U, _______, _______, _______,
+        _______, KC_ACL1, KC_WH_L, KC_WH_D, KC_WH_R, _______, _______,           _______, _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
+        _______, KC_ACL0, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, KC_MS_BTN2, KC_MS_BTN1
     ),
@@ -153,7 +153,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void keyboard_post_init_user(void) {
     rgblight_disable_noeeprom();
     rgb_matrix_disable();
-    debug_enable=true;
+    // debug_enable=true;
 };
 
 // caps word setup
