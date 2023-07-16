@@ -18,9 +18,6 @@
 
 #include QMK_KEYBOARD_H
 #include "version.h"
-#include "oneshot.h"
-// #include "timer.h"
-// #include "print.h"
 
 #define L_NAV LT(NAV, KC_ENT)
 
@@ -28,8 +25,9 @@ enum layers {
     BASE,  // default layer
     NAV,
     QWERTY,
-    FUN,
+    GAMING,
     MOUSE,
+    FUN,
 };
 
 enum custom_keycodes {
@@ -100,7 +98,7 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_moonlander(
-        OS_FST,  OS_N1,   OS_N2,   OS_N3,   OS_N4,   OS_N5,      TG(QWERTY),         _______, OS_N6,   OS_N7,   OS_N8,   OS_N9,   OS_N0,   OS_LST,
+        OS_FST,  OS_N1,   OS_N2,   OS_N3,   OS_N4,   OS_N5,      TG(QWERTY),      TG(GAMING), OS_N6,   OS_N7,   OS_N8,   OS_N9,   OS_N0,   OS_LST,
         KC_TAB,  KC_SCLN, KC_COMMA,KC_DOT,  KC_P,    KC_Y,       _______,            _______, KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
         KC_ESC,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,       _______,            _______, KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
         KC_LSFT, KC_QUOT, KC_Q,    KC_J,    KC_K,    KC_X,                                    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
@@ -123,13 +121,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_GRV,  _______, KC_LEFT, KC_RGHT,          _______,           _______,          KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, _______,
                                             _______, _______, _______,           _______,  _______,  _______
     ),
-    [FUN] = LAYOUT_moonlander(
-        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F11,            KC_F12,  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______,
-        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, KC_MPRV, KC_MNXT,          _______,           _______,          KC_VOLD, KC_VOLU, _______, _______, _______,
-                                            _______, _______, _______,           KC_MRWD, KC_MFFD, KC_MPLY
+    [GAMING] = LAYOUT_moonlander(
+        KC_EQL,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    _______,           _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    _______,           _______, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+        KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    _______,           _______, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+        _______, KC_GRV,  _______, KC_LEFT, KC_RGHT,          KC_LCTL,           _______,          KC_UP,   KC_DOWN, KC_LBRC, KC_RBRC, _______,
+                                            KC_SPC,  KC_LALT, KC_LGUI,           _______,  _______,  _______
     ),
     [MOUSE] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
@@ -138,6 +136,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_ACL0, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, KC_MS_BTN2, KC_MS_BTN1
+    ),
+    [FUN] = LAYOUT_moonlander(
+        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F11,            KC_F12,  KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, KC_MPRV, KC_MNXT,          RGB_VAI,           RGB_TOG,          KC_VOLD, KC_VOLU, _______, _______, _______,
+                                            RGB_HUD, RGB_VAD, RGB_HUI,           KC_MRWD, KC_MFFD, KC_MPLY
     ),
 };
 
@@ -179,15 +185,16 @@ bool caps_word_press_user(uint16_t keycode) {
     }
 };
 
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//     switch (get_highest_layer(state)) {
-//         case NAV:
-//             rgb_matrix_enable();
-//             rgb_matrix_sethsv(0, 0, 175);
-//             break;
-//         default:
-//             rgb_matrix_disable();
-//     }
-//
-//     return state;
-// }
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+        case GAMING:
+        case FUN:
+            rgb_matrix_enable();
+            // rgb_matrix_sethsv(0, 0, 175);
+            break;
+        default:
+            rgb_matrix_disable();
+    }
+
+    return state;
+}
