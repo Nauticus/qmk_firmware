@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "voyager.h"
+#include "action_layer.h"
 
 keyboard_config_t keyboard_config;
 
