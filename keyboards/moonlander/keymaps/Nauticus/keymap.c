@@ -19,14 +19,16 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 
+// delete word
 #define N_DELW LALT(KC_BSPC)
-#define N_COPY LGUI(KC_C)
-#define N_PST LGUI(KC_V)
 
 #define N_CTBS MT(MOD_LCTL, KC_BSPC)
+
+// change yabai layout
 #define N_CLAY MEH(KC_A)
 #define N_ENSY LT(_SYM, KC_ENT)
-#define N_GRVF LT(_FUN, KC_GRV)
+
+// change to second gaming layer
 #define N_TOGT LT(_G_TWO, KC_ENT)
 
 // One-shot mods
@@ -35,6 +37,8 @@
 #define N_OALT OSM(MOD_LALT)
 #define N_OSFT OSM(MOD_LSFT)
 #define N_OCTL OSM(MOD_LCTL)
+
+#define N_CPPS TD(TD_PCPS)
 
 enum layers {
     _BASE,  // default layer
@@ -86,6 +90,30 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     NULL
 };
 
+enum {
+    TD_PCPS = 0,
+};
+
+void pcps_finished(tap_dance_state_t *state, void *user_data) {
+    if (state->count == 1) {
+        register_code(KC_LGUI);
+        register_code(KC_C);
+        unregister_code(KC_C);
+        unregister_code(KC_LGUI);
+    } else if (state->count == 2) {
+        register_code(KC_LGUI);
+        register_code(KC_V);
+        unregister_code(KC_V);
+        unregister_code(KC_LGUI);
+    }
+};
+
+// Tap Dance Declarations
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_PCPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, pcps_finished, NULL),
+};
+
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT_moonlander(
@@ -113,10 +141,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                             XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
     ),
     [_NAV] = LAYOUT_moonlander(
-        _______, C(KC_1), C(KC_2), C(KC_3), C(KC_4), C(KC_5), _______,           _______, C(KC_6), C(KC_7), C(KC_8), C(KC_9), C(KC_0), KC_DEL,
-        _______, _______, _______, _______, _______, _______, _______,           _______, KC_PGUP, KC_HOME, KC_UP,   KC_END,  _______, _______,
-        _______, N_OGUI,  N_OALT,  N_OSFT,  N_OCTL,  _______, _______,           _______, KC_TAB,  KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_ENT,
-        _______, N_HYP,   _______, N_COPY,  N_PST,   _______,                             KC_PGDN, N_CLAY,  N_DELW,  _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, N_CPPS,  _______, _______, _______,           _______, KC_TAB,  KC_HOME, KC_UP,   KC_END,  KC_PGUP, _______,
+        _______, N_OGUI,  N_OALT,  N_OSFT,  N_OCTL,  _______, _______,           _______, KC_BSPC, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL,  KC_ENT,
+        _______, N_HYP,   _______, _______, _______, _______,                             _______, N_CLAY,  N_DELW,  _______, KC_PGDN, _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
@@ -129,7 +157,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                             _______, _______, _______,           _______, KC_MS_BTN2, KC_MS_BTN1
     ),
     [_SYM] = LAYOUT_moonlander(
-        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, C(KC_1), C(KC_2), C(KC_3), C(KC_4), C(KC_5), _______,           _______, C(KC_6), C(KC_7), C(KC_8), C(KC_9), C(KC_0), KC_DEL,
         _______, KC_HASH, KC_DLR,  KC_LBRC, KC_RBRC, KC_AMPR, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, KC_EXLM, KC_PLUS, KC_LPRN, KC_RPRN, KC_EQL,  _______,           _______, _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
         _______, KC_AT,   KC_PERC, KC_LCBR, KC_RCBR, KC_ASTR,                             _______, _______, _______, _______, N_HYP,   _______,
