@@ -23,6 +23,8 @@
 #define N_DELW LALT(KC_BSPC)
 
 #define N_CTBS MT(MOD_LCTL, KC_BSPC)
+#define N_ALTQ MT(MOD_LALT, KC_QUOT)
+#define N_ALTZ MT(MOD_LALT, KC_Z)
 
 // change yabai layout
 #define N_CLAY MEH(KC_A)
@@ -114,13 +116,14 @@ tap_dance_action_t tap_dance_actions[] = {
 };
 
 
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT_moonlander(
         KC_GRV,    OS_N1,   OS_N2,    OS_N3,   OS_N4,   OS_N5,    LED_LEVEL,       _______, OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
         KC_TAB,    KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,     _______,         _______, KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
         KC_ESC,    KC_A,    KC_O,     KC_E,    KC_U,    KC_I,     _______,         _______, KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
-        KC_LSFT,   KC_QUOT, KC_Q,     KC_J,    KC_K,    KC_X,                               KC_B,   KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
+        KC_LSFT,   N_ALTQ,  KC_Q,     KC_J,    KC_K,    KC_X,                               KC_B,   KC_M,    KC_W,    KC_V,    N_ALTZ,    KC_RSFT,
         _______,   _______, _______,  _______, _______,           _______,         _______,         _______, _______, _______, _______, _______,
                                                N_CTBS,  MO(_NAV), _______,         _______, N_ENSY, KC_SPC
     ),
