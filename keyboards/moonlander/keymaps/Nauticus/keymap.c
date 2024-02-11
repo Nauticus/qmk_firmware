@@ -19,30 +19,31 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
 
-#define N_MEH OSM(MOD_LCTL | MOD_LALT | MOD_LGUI)
-#define MOD_CSHF MOD_LCTL | MOD_LSFT
 #define N_DELW LALT(KC_BSPC)
-#define N_CTBS MT(MOD_LCTL, KC_BSPC)
-#define N_CSHM MT(MOD_CSHF, KC_MINS)
-#define N_ENSY LT(SYM, KC_ENT)
-#define N_GRVF LT(FUN, KC_GRV)
 #define N_COPY LGUI(KC_C)
 #define N_PST LGUI(KC_V)
 
+#define N_CTBS MT(MOD_LCTL, KC_BSPC)
+#define N_CLAY MEH(KC_A)
+#define N_ENSY LT(_SYM, KC_ENT)
+#define N_GRVF LT(_FUN, KC_GRV)
+#define N_TOGT LT(_G_TWO, KC_ENT)
+
 // One-shot mods
+#define N_HYP OSM(MOD_MEH)
 #define N_OGUI OSM(MOD_LGUI)
 #define N_OALT OSM(MOD_LALT)
 #define N_OSFT OSM(MOD_LSFT)
 #define N_OCTL OSM(MOD_LCTL)
 
 enum layers {
-    BASE,  // default layer
-    G_ONE,    // gaming layer
-    G_TWO,    // gaming layer
-    NAV,
-    SYM,
-    MOUSE,
-    FUN,
+    _BASE,  // default layer
+    _G_ONE,    // gaming layer
+    _G_TWO,    // gaming layer
+    _NAV,
+    _SYM,
+    _MOUSE,
+    _FUN,
 };
 
 enum custom_keycodes {
@@ -87,23 +88,23 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [BASE] = LAYOUT_moonlander(
-        LT(FUN, KC_GRV),    OS_N1,   OS_N2,   OS_N3,   OS_N4,   OS_N5,   LED_LEVEL,       _______, OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
-        KC_TAB,    KC_SCLN, KC_COMMA,KC_DOT,  KC_P,    KC_Y,    _______,         _______, KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
-        KC_ESC,    KC_A,    KC_O,    KC_E,    KC_U,    KC_I,    _______,         _______, KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    N_CSHM,
-        KC_LSFT,   KC_QUOT, KC_Q,    KC_J,    KC_K,    KC_X,                              KC_B,   KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
-        _______,   _______, _______, _______, _______,          _______,         _______,         _______, _______, _______, _______, MO(FUN),
-                                              N_CTBS,  MO(NAV), _______,         _______, N_ENSY, KC_SPC
+    [_BASE] = LAYOUT_moonlander(
+        KC_GRV,    OS_N1,   OS_N2,    OS_N3,   OS_N4,   OS_N5,    LED_LEVEL,       _______, OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
+        KC_TAB,    KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,     _______,         _______, KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
+        KC_ESC,    KC_A,    KC_O,     KC_E,    KC_U,    KC_I,     _______,         _______, KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
+        KC_LSFT,   KC_QUOT, KC_Q,     KC_J,    KC_K,    KC_X,                               KC_B,   KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
+        _______,   _______, _______,  _______, _______,           _______,         _______,         _______, _______, _______, _______, _______,
+                                               N_CTBS,  MO(_NAV), _______,         _______, N_ENSY, KC_SPC
     ),
-    [G_ONE] = LAYOUT_moonlander(
-        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,              XXXXXXX,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,              XXXXXXX,           XXXXXXX, TG(G_ONE), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,              XXXXXXX,           XXXXXXX, XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                          XXXXXXX,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                    XXXXXXX,           XXXXXXX,            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                            KC_SPC,  LT(G_TWO, KC_ENT), XXXXXXX,           XXXXXXX, XXXXXXX,   XXXXXXX
+    [_G_ONE] = LAYOUT_moonlander(
+        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,   XXXXXXX,           XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_LALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   XXXXXXX,           XXXXXXX, TG(_G_ONE), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,   XXXXXXX,           XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX,           XXXXXXX,             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                            KC_SPC,  N_TOGT, XXXXXXX,           XXXXXXX, XXXXXXX,    XXXXXXX
     ),
-    [G_TWO] = LAYOUT_moonlander(
+    [_G_TWO] = LAYOUT_moonlander(
         KC_ESC,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         KC_LALT, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         KC_LCTL, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
@@ -111,15 +112,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,           XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                             XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
     ),
-    [NAV] = LAYOUT_moonlander(
-        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, KC_DEL,
+    [_NAV] = LAYOUT_moonlander(
+        _______, C(KC_1), C(KC_2), C(KC_3), C(KC_4), C(KC_5), _______,           _______, C(KC_6), C(KC_7), C(KC_8), C(KC_9), C(KC_0), KC_DEL,
         _______, _______, _______, _______, _______, _______, _______,           _______, KC_PGUP, KC_HOME, KC_UP,   KC_END,  _______, _______,
         _______, N_OGUI,  N_OALT,  N_OSFT,  N_OCTL,  _______, _______,           _______, KC_TAB,  KC_LEFT, KC_DOWN, KC_RGHT, _______, KC_ENT,
-        _______, N_MEH,   _______, N_COPY,  N_PST,   _______,                             KC_PGDN, _______, N_DELW,  _______, _______, _______,
+        _______, N_HYP,   _______, N_COPY,  N_PST,   _______,                             KC_PGDN, N_CLAY,  N_DELW,  _______, _______, _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
-    [MOUSE] = LAYOUT_moonlander(
+    [_MOUSE] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, KC_ACL2, _______, KC_WH_U, _______, _______, _______,           _______, _______, _______, KC_MS_U, _______, _______, _______,
         _______, KC_ACL1, KC_WH_L, KC_WH_D, KC_WH_R, _______, _______,           _______, _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
@@ -127,21 +128,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, KC_MS_BTN2, KC_MS_BTN1
     ),
-    [SYM] = LAYOUT_moonlander(
+    [_SYM] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, KC_HASH, KC_DLR,  KC_LBRC, KC_RBRC, KC_AMPR, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, KC_EXLM, KC_PLUS, KC_LPRN, KC_RPRN, KC_EQL,  _______,           _______, _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
-        _______, KC_AT,   KC_PERC, KC_LCBR, KC_RCBR, KC_ASTR,                             _______, _______, _______, _______, N_MEH,   _______,
+        _______, KC_AT,   KC_PERC, KC_LCBR, KC_RCBR, KC_ASTR,                             _______, _______, _______, _______, N_HYP,   _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
-    [FUN] = LAYOUT_moonlander(
-        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,           _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-        _______, _______, _______, _______, _______, _______, _______,           _______, TG(G_ONE),  _______, _______, _______, _______, KC_F12,
-        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, KC_MPRV, KC_MNXT,          RGB_VAI,           RGB_TOG,          KC_VOLD, KC_VOLU, _______, _______, _______,
-                                            RGB_HUD, RGB_VAD, RGB_HUI,           KC_MRWD, KC_MFFD, KC_MPLY
+    [_FUN] = LAYOUT_moonlander(
+        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,           _______, KC_F6,      KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______,    _______, _______, _______, _______, KC_F12,
+        _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______,           _______, TO(_G_ONE), _______, _______, _______, _______, _______,
+        _______, _______, _______, KC_VOLD, KC_VOLU, _______,                             _______,    _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,          _______,           _______,             _______, _______, _______, _______, _______,
+                                            _______, _______, _______,           _______, _______,    _______
     ),
 };
 
@@ -197,16 +198,17 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//     switch (get_highest_layer(state)) {
-//         case GAMING:
-//         case FUN:
-//             rgb_matrix_enable();
-//             // rgb_matrix_sethsv(0, 0, 175);
-//             break;
-//         default:
-//             rgb_matrix_disable();
-//     }
-//
-//     return state;
-// }
+layer_state_t layer_state_set_user(layer_state_t state) {
+    switch (get_highest_layer(state)) {
+        case _G_ONE:
+        case _G_TWO:
+        case _FUN:
+            rgb_matrix_enable();
+            // rgb_matrix_sethsv(0, 0, 175);
+            break;
+        default:
+            rgb_matrix_disable();
+    }
+
+    return update_tri_layer_state(state, _NAV, _SYM, _FUN);
+}
