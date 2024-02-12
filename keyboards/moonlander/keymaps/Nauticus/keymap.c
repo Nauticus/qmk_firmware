@@ -110,12 +110,15 @@ void pcps_finished(tap_dance_state_t *state, void *user_data) {
     }
 };
 
-// Tap Dance Declarations
-tap_dance_action_t tap_dance_actions[] = {
-    [TD_PCPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, pcps_finished, NULL),
+void pcps_reset(tap_dance_state_t *state, void *user_data) {
+    unregister_code(KC_C);
+    unregister_code(KC_V);
 };
 
-
+// Tap Dance Declarations
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_PCPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, pcps_finished, pcps_reset),
+};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -123,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_GRV,    OS_N1,   OS_N2,    OS_N3,   OS_N4,   OS_N5,    LED_LEVEL,       _______, OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
         KC_TAB,    KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,     _______,         _______, KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
         KC_ESC,    KC_A,    KC_O,     KC_E,    KC_U,    KC_I,     _______,         _______, KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
-        KC_LSFT,   N_ALTQ,  KC_Q,     KC_J,    KC_K,    KC_X,                               KC_B,   KC_M,    KC_W,    KC_V,    N_ALTZ,    KC_RSFT,
+        KC_LSFT,   N_ALTQ,  KC_Q,     KC_J,    KC_K,    KC_X,                               KC_B,   KC_M,    KC_W,    KC_V,    N_ALTZ,  KC_RSFT,
         _______,   _______, _______,  _______, _______,           _______,         _______,         _______, _______, _______, _______, _______,
                                                N_CTBS,  MO(_NAV), _______,         _______, N_ENSY, KC_SPC
     ),
@@ -162,8 +165,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_SYM] = LAYOUT_moonlander(
         _______, C(KC_1), C(KC_2), C(KC_3), C(KC_4), C(KC_5), _______,           _______, C(KC_6), C(KC_7), C(KC_8), C(KC_9), C(KC_0), KC_DEL,
         _______, KC_HASH, KC_DLR,  KC_LBRC, KC_RBRC, KC_AMPR, _______,           _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_EXLM, KC_PLUS, KC_LPRN, KC_RPRN, KC_EQL,  _______,           _______, _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
-        _______, KC_AT,   KC_PERC, KC_LCBR, KC_RCBR, KC_ASTR,                             _______, _______, _______, _______, N_HYP,   _______,
+        _______, KC_EXLM, KC_PERC, KC_LPRN, KC_RPRN, KC_EQL,  _______,           _______, _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
+        _______, KC_AT,   KC_CIRC, KC_LCBR, KC_RCBR, KC_ASTR,                             _______, _______, _______, _______, N_HYP,   _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
