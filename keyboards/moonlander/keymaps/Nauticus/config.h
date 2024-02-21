@@ -22,12 +22,14 @@
 
 #undef TAPPING_TERM
 #define TAPPING_TERM 175
+#define TAPPING_TERM_PER_KEY
 
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
 #define QUICK_TAP_TERM 0
 
 #define ONESHOT_TAP_TOGGLE 1  /* Tapping this number of times holds the key until tapped once again. */
 #define ONESHOT_TIMEOUT 20000  /* Time (in ms) before the one shot key is released */
+
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 
 #define PERMISSIVE_HOLD_PER_KEY
