@@ -130,6 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,   _______, _______,  _______, _______,           _______,         _______,         _______, _______, _______, _______, _______,
                                                N_CTBS,  MO(_NAV), _______,         _______, N_ENSY, KC_SPC
     ),
+    // -- Gaming Layers [START] --
     [_G_ONE] = LAYOUT_moonlander(
         KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,   XXXXXXX,           XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         KC_LALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   XXXXXXX,           XXXXXXX, TG(_G_ONE), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
@@ -146,6 +147,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,           XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
                                             XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
     ),
+    // -- Gaming Layers [END] --
     [_NAV] = LAYOUT_moonlander(
         _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, N_CPPS,  _______, _______, _______,           _______, KC_TAB,  KC_HOME, KC_UP,   KC_END,  KC_PGUP, _______,
@@ -229,6 +231,15 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
         default:
             // Do not select the hold action when another key is tapped.
             return false;
+    }
+}
+
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case N_CTBS:
+            return TAPPING_TERM - 50;
+        default:
+            return TAPPING_TERM;
     }
 }
 
