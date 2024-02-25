@@ -4,28 +4,19 @@
 
 #include QMK_KEYBOARD_H
 
-// delete word
-#define N_DELW LALT(KC_BSPC)
-
+// thumb-keys
 #define N_CTBS MT(MOD_LCTL, KC_BSPC)
-#define N_ALTQ MT(MOD_LALT, KC_QUOT)
-#define N_ALTZ MT(MOD_LALT, KC_Z)
-
-// change yabai layout
-#define N_CLAY MEH(KC_A)
 #define N_ENSY LT(_SYM, KC_ENT)
 
 // change to second gaming layer
 #define N_TOGT LT(_G_TWO, KC_ENT)
 
 // One-shot mods
-#define N_HYP OSM(MOD_MEH)
-#define N_OGUI OSM(MOD_LGUI)
-#define N_OALT OSM(MOD_LALT)
-#define N_OSFT OSM(MOD_LSFT)
-#define N_OCTL OSM(MOD_LCTL)
-
-#define N_CPPS TD(TD_PCPS)
+#define N_HYP  KC_MEH
+#define N_OGUI KC_LGUI
+#define N_OALT KC_LALT
+#define N_OSFT KC_LSFT
+#define N_OCTL KC_LCTL
 
 enum layers {
     _BASE,  // default layer
@@ -33,7 +24,6 @@ enum layers {
     _G_TWO,    // gaming layer
     _NAV,
     _SYM,
-    _MOUSE,
     _FUN,
 };
 
@@ -49,6 +39,7 @@ enum custom_keycodes {
     OS_N8 = KC_RCBR,
     OS_N9 = KC_RBRC,
     OS_N0 = KC_ASTR,
+    OS_PE = KC_EXLM,
     OS_TEST,
 };
 
@@ -62,6 +53,7 @@ const key_override_t n7_rprn_override = ko_make_basic(MOD_MASK_SHIFT, OS_N7, KC_
 const key_override_t n8_rcbr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N8, KC_8);
 const key_override_t n9_rbrc_override = ko_make_basic(MOD_MASK_SHIFT, OS_N9, KC_9);
 const key_override_t n0_astr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N0, KC_0);
+const key_override_t exlm_perc_override = ko_make_basic(MOD_MASK_SHIFT, OS_PE, KC_PERC);
 
 const key_override_t **key_overrides = (const key_override_t *[]) {
     &n1_plus_override,
@@ -74,44 +66,17 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     &n8_rcbr_override,
     &n9_rbrc_override,
     &n0_astr_override,
+    &exlm_perc_override,
     NULL
-};
-
-enum {
-    TD_PCPS = 0,
-};
-
-void pcps_finished(tap_dance_state_t *state, void *user_data) {
-    if (state->count == 1) {
-        register_code(KC_LGUI);
-        register_code(KC_C);
-        unregister_code(KC_C);
-        unregister_code(KC_LGUI);
-    } else if (state->count == 2) {
-        register_code(KC_LGUI);
-        register_code(KC_V);
-        unregister_code(KC_V);
-        unregister_code(KC_LGUI);
-    }
-};
-
-void pcps_reset(tap_dance_state_t *state, void *user_data) {
-    unregister_code(KC_C);
-    unregister_code(KC_V);
-};
-
-// Tap Dance Declarations
-tap_dance_action_t tap_dance_actions[] = {
-    [TD_PCPS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, pcps_finished, pcps_reset),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
-        KC_GRV,    OS_N1,   OS_N2,    OS_N3,   OS_N4,   OS_N5,                    OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
-        KC_TAB,    KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,                     KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
-        KC_ESC,    KC_A,    KC_O,     KC_E,    KC_U,    KC_I,                     KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
-        KC_LSFT,   N_ALTQ,  KC_Q,     KC_J,    KC_K,    KC_X,                     KC_B,   KC_M,    KC_W,    KC_V,    N_ALTZ,  KC_RSFT,
-                                                        N_CTBS, MO(_NAV), N_ENSY, KC_SPC
+        KC_GRV,  OS_N1,   OS_N2,    OS_N3,   OS_N4,   OS_N5,                     OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
+        OS_PE,   KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,                      KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
+        KC_ESC,  KC_A,    KC_O,     KC_E,    KC_U,    KC_I,                      KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
+        KC_LSFT, KC_QUOT, KC_Q,     KC_J,    KC_K,    KC_X,                      KC_B,   KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
+                                                      N_CTBS, MO(_NAV),  N_ENSY, KC_SPC
     ),
     // -- Gaming Layers [START] --
     [_G_ONE] = LAYOUT(
@@ -130,30 +95,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     // -- Gaming Layers [END] --
     [_NAV] = LAYOUT(
-        _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, N_CPPS,  _______, _______,                   KC_TAB,  KC_HOME, KC_UP,   KC_END,  KC_PGUP, _______,
-        _______, N_OGUI,  N_OALT,  N_OSFT,  N_OCTL,  _______,                   KC_BSPC, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL,  KC_ENT,
-        _______, N_HYP,   _______, _______, _______, _______,                   _______, N_CLAY,  N_DELW,  _______, KC_PGDN, _______,
+        _______, _______, _______, _______, _______, _______,                   _______, KC_HOME, _______, KC_END,  _______, _______,
+        _______, _______, _______, G(KC_C), G(KC_V), _______,                   KC_TAB,  KC_BSPC, KC_UP,   KC_DEL,  KC_PGUP, _______,
+        _______, N_OGUI,  N_OALT,  N_OSFT,  N_OCTL,  _______,                   _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,
+        _______, N_HYP,   _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
                                                      _______, _______, _______, _______
-    ),
-    [_MOUSE] = LAYOUT(
-        _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,
-        _______, KC_ACL2, _______, KC_WH_U, _______, _______,                      _______, _______, KC_MS_U, _______, _______, _______,
-        _______, KC_ACL1, KC_WH_L, KC_WH_D, KC_WH_R, _______,                      _______, KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
-        _______, KC_ACL0, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,
-                                                     _______, _______, KC_MS_BTN2, KC_MS_BTN1
     ),
     [_SYM] = LAYOUT(
         _______, C(KC_1), C(KC_2), C(KC_3), C(KC_4), C(KC_5),                   C(KC_6), C(KC_7), C(KC_8), C(KC_9), C(KC_0), KC_DEL,
-        _______, KC_HASH, KC_DLR,  KC_LBRC, KC_RBRC, KC_AMPR,                   _______, _______, _______, _______, _______, _______,
-        _______, KC_EXLM, KC_PERC, KC_LPRN, KC_RPRN, KC_EQL,                    _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
-        _______, KC_AT,   KC_CIRC, KC_LCBR, KC_RCBR, KC_ASTR,                   _______, _______, _______, _______, N_HYP,   _______,
+        _______, KC_CIRC, KC_DLR,  KC_LBRC, KC_RBRC, _______,                   _______, _______, _______, _______, _______, _______,
+        _______, KC_AT,   KC_HASH, KC_LPRN, KC_RPRN, _______,                   _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
+        _______, _______, _______, KC_LCBR, KC_RCBR, _______,                   _______, _______, _______, _______, N_HYP,   _______,
                                                      _______, _______, _______, _______
     ),
     [_FUN] = LAYOUT(
         _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,      KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-        _______, _______, _______, _______, _______, _______,                   _______,    _______, _______, _______, _______, KC_F12,
-        _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT,                   TO(_G_ONE), _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______,                   TO(_G_ONE), _______, _______, _______, _______, KC_F12,
+        _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT,                   _______,    _______, _______, _______, _______, _______,
         _______, _______, _______, KC_VOLD, KC_VOLU, _______,                   _______,    _______, _______, _______, _______, _______,
                                                      _______, _______, _______, _______
     ),
@@ -213,7 +171,6 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
         case _G_ONE:
         case _G_TWO:
-        case _FUN:
             rgb_matrix_enable();
             // rgb_matrix_sethsv(0, 0, 175);
             break;
