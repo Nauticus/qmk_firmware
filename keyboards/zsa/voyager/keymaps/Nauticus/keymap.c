@@ -39,10 +39,13 @@ enum custom_keycodes {
     OS_N8 = KC_RCBR,
     OS_N9 = KC_RBRC,
     OS_N0 = KC_ASTR,
-    OS_PE = KC_EXLM,
     OS_TEST,
 };
 
+/* KEY OVERRIDES
+ * These help to override the number keys with symbols. So you get symbols unshifted and numbers with shift.
+ * These are most common symbols that are used in programming. You can change them hovewer you like.
+ */
 const key_override_t n1_plus_override = ko_make_basic(MOD_MASK_SHIFT, OS_N1, KC_1);
 const key_override_t n2_lbrc_override = ko_make_basic(MOD_MASK_SHIFT, OS_N2, KC_2);
 const key_override_t n3_lcbr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N3, KC_3);
@@ -53,7 +56,6 @@ const key_override_t n7_rprn_override = ko_make_basic(MOD_MASK_SHIFT, OS_N7, KC_
 const key_override_t n8_rcbr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N8, KC_8);
 const key_override_t n9_rbrc_override = ko_make_basic(MOD_MASK_SHIFT, OS_N9, KC_9);
 const key_override_t n0_astr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N0, KC_0);
-const key_override_t exlm_perc_override = ko_make_basic(MOD_MASK_SHIFT, OS_PE, KC_PERC);
 
 const key_override_t **key_overrides = (const key_override_t *[]) {
     &n1_plus_override,
@@ -66,14 +68,13 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     &n8_rcbr_override,
     &n9_rbrc_override,
     &n0_astr_override,
-    &exlm_perc_override,
     NULL
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT(
         KC_GRV,  OS_N1,   OS_N2,    OS_N3,   OS_N4,   OS_N5,                     OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
-        OS_PE,   KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,                      KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
+        KC_TAB,  KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,                      KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
         KC_ESC,  KC_A,    KC_O,     KC_E,    KC_U,    KC_I,                      KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
         KC_LSFT, KC_QUOT, KC_Q,     KC_J,    KC_K,    KC_X,                      KC_B,   KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
                                                       N_CTBS, MO(_NAV),  N_ENSY, KC_SPC
@@ -103,14 +104,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_SYM] = LAYOUT(
         _______, C(KC_1), C(KC_2), C(KC_3), C(KC_4), C(KC_5),                   C(KC_6), C(KC_7), C(KC_8), C(KC_9), C(KC_0), KC_DEL,
-        _______, KC_CIRC, KC_DLR,  KC_LBRC, KC_RBRC, _______,                   _______, _______, _______, _______, _______, _______,
-        _______, KC_AT,   KC_HASH, KC_LPRN, KC_RPRN, _______,                   _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
-        _______, _______, _______, KC_LCBR, KC_RCBR, _______,                   _______, _______, _______, _______, N_HYP,   _______,
+        _______, KC_CIRC, KC_DLR,  KC_PERC, KC_LBRC, KC_RBRC,                   _______, _______, _______, _______, _______, _______,
+        _______, KC_AT,   KC_HASH, KC_EXLM, KC_LPRN, KC_RPRN,                   _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
+        _______, _______, _______, _______, KC_LCBR, KC_RCBR,                   _______, _______, _______, _______, N_HYP,   _______,
                                                      _______, _______, _______, _______
     ),
     [_FUN] = LAYOUT(
         _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,      KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-        _______, _______, _______, _______, _______, _______,                   TO(_G_ONE), _______, _______, _______, _______, KC_F12,
+        _______, _______, _______, _______, _______, _______,                   TO(_G_ONE), _______, _______, _______, RGB_TOG, KC_F12,
         _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT,                   _______,    _______, _______, _______, _______, _______,
         _______, _______, _______, KC_VOLD, KC_VOLU, _______,                   _______,    _______, _______, _______, _______, _______,
                                                      _______, _______, _______, _______
@@ -118,9 +119,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void keyboard_post_init_user(void) {
-    rgblight_disable_noeeprom();
-    rgb_matrix_disable();
-    // debug_enable=true;
+    rgblight_mode(1);
+    rgblight_sethsv(0, 0, 64);
 };
 
 // caps word setup
@@ -156,7 +156,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
             // Do not select the hold action when another key is tapped.
             return false;
     }
-}
+};
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -165,18 +165,56 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
         default:
             return TAPPING_TERM;
     }
-}
+};
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
-        case _G_ONE:
-        case _G_TWO:
-            rgb_matrix_enable();
-            // rgb_matrix_sethsv(0, 0, 175);
-            break;
-        default:
-            rgb_matrix_disable();
-    }
-
     return update_tri_layer_state(state, _NAV, _SYM, _FUN);
+};
+
+/* TURN OFF RGB AFTER TIMEOUT
+ * This feature will turn off the RGB after a certain amount of time has passed since the last keypress.
+ */
+
+static uint32_t key_timer;           // timer for last keyboard activity, use 32bit value and function to make longer idle time possible
+static void refresh_rgb(void);       // refreshes the activity timer and RGB, invoke whenever any activity happens
+static void check_rgb_timeout(void); // checks if enough time has passed for RGB to timeout
+bool is_rgb_timeout = false;         // store if RGB has timed out or not in a boolean
+
+void refresh_rgb(void) {
+    key_timer = timer_read32(); // store time of last refresh
+    if (is_rgb_timeout)
+    {
+        is_rgb_timeout = false;
+        rgblight_enable_noeeprom();
+    }
+}
+void check_rgb_timeout(void) {
+    if (!is_rgb_timeout && timer_elapsed32(key_timer) > RGBLIGHT_TIMEOUT) // check if RGB has already timeout and if enough time has passed
+    {
+        rgblight_disable_noeeprom();
+        is_rgb_timeout = true;
+    }
+}
+
+/* Then, call the above functions from QMK's built in post processing functions like so */
+/* Runs at the end of each scan loop, check if RGB timeout has occured or not */
+void housekeeping_task_user(void) {
+#ifdef RGBLIGHT_TIMEOUT
+    check_rgb_timeout();
+#endif
+}
+
+/* Runs after each key press, check if activity occurred */
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef RGBLIGHT_TIMEOUT
+    if (record->event.pressed)
+        refresh_rgb();
+#endif
+}
+
+/* Runs after each encoder tick, check if activity occurred */
+void post_encoder_update_user(uint8_t index, bool clockwise) {
+#ifdef RGBLIGHT_TIMEOUT
+    refresh_rgb();
+#endif
 }
