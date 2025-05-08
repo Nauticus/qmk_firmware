@@ -18,12 +18,6 @@
 
 #include QMK_KEYBOARD_H
 
-// thumb-keys
-#define N_CTBS MT(MOD_LCTL, KC_BSPC)
-#define N_ENSY LT(_SYM, KC_ENT)
-
-// change to second gaming layer
-#define N_TOGT LT(_G_TWO, KC_ENT)
 
 // One-shot mods
 #define N_HYP  KC_MEH
@@ -34,8 +28,7 @@
 
 enum layers {
     _BASE,  // default layer
-    _G_ONE,    // gaming layer
-    _G_TWO,    // gaming layer
+    _GAME,
     _NAV,
     _SYM,
     _FUN,
@@ -43,16 +36,16 @@ enum layers {
 
 enum custom_keycodes {
     OS_NOOP = SAFE_RANGE,
-    OS_N1 = KC_PLUS,
-    OS_N2 = KC_LBRC,
-    OS_N3 = KC_LCBR,
-    OS_N4 = KC_LPRN,
-    OS_N5 = KC_AMPR,
-    OS_N6 = KC_EQL,
-    OS_N7 = KC_RPRN,
-    OS_N8 = KC_RCBR,
-    OS_N9 = KC_RBRC,
-    OS_N0 = KC_ASTR,
+    N_1 = KC_PLUS,
+    N_2 = KC_LBRC,
+    N_3 = KC_LCBR,
+    N_4 = KC_LPRN,
+    N_5 = KC_AMPR,
+    N_6 = KC_EQL,
+    N_7 = KC_RPRN,
+    N_8 = KC_RCBR,
+    N_9 = KC_RBRC,
+    N_0 = KC_ASTR,
     OS_TEST,
 };
 
@@ -60,16 +53,16 @@ enum custom_keycodes {
  * These help to override the number keys with symbols. So you get symbols unshifted and numbers with shift.
  * These are most common symbols that are used in programming. You can change them hovewer you like.
  */
-const key_override_t n1_plus_override = ko_make_basic(MOD_MASK_SHIFT, OS_N1, KC_1);
-const key_override_t n2_lbrc_override = ko_make_basic(MOD_MASK_SHIFT, OS_N2, KC_2);
-const key_override_t n3_lcbr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N3, KC_3);
-const key_override_t n4_lprn_override = ko_make_basic(MOD_MASK_SHIFT, OS_N4, KC_4);
-const key_override_t n5_ampr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N5, KC_5);
-const key_override_t n6_eql_override  = ko_make_basic(MOD_MASK_SHIFT, OS_N6, KC_6);
-const key_override_t n7_rprn_override = ko_make_basic(MOD_MASK_SHIFT, OS_N7, KC_7);
-const key_override_t n8_rcbr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N8, KC_8);
-const key_override_t n9_rbrc_override = ko_make_basic(MOD_MASK_SHIFT, OS_N9, KC_9);
-const key_override_t n0_astr_override = ko_make_basic(MOD_MASK_SHIFT, OS_N0, KC_0);
+const key_override_t n1_plus_override = ko_make_basic(MOD_MASK_SHIFT, N_1, KC_1);
+const key_override_t n2_lbrc_override = ko_make_basic(MOD_MASK_SHIFT, N_2, KC_2);
+const key_override_t n3_lcbr_override = ko_make_basic(MOD_MASK_SHIFT, N_3, KC_3);
+const key_override_t n4_lprn_override = ko_make_basic(MOD_MASK_SHIFT, N_4, KC_4);
+const key_override_t n5_ampr_override = ko_make_basic(MOD_MASK_SHIFT, N_5, KC_5);
+const key_override_t n6_eql_override  = ko_make_basic(MOD_MASK_SHIFT, N_6, KC_6);
+const key_override_t n7_rprn_override = ko_make_basic(MOD_MASK_SHIFT, N_7, KC_7);
+const key_override_t n8_rcbr_override = ko_make_basic(MOD_MASK_SHIFT, N_8, KC_8);
+const key_override_t n9_rbrc_override = ko_make_basic(MOD_MASK_SHIFT, N_9, KC_9);
+const key_override_t n0_astr_override = ko_make_basic(MOD_MASK_SHIFT, N_0, KC_0);
 
 const key_override_t **key_overrides = (const key_override_t *[]) {
     &n1_plus_override,
@@ -85,57 +78,52 @@ const key_override_t **key_overrides = (const key_override_t *[]) {
     NULL
 };
 
+socd_cleaner_t socd_opposing_pairs[] = {
+  {{KC_W, KC_S}, SOCD_CLEANER_LAST},
+  {{KC_A, KC_D}, SOCD_CLEANER_LAST},
+};
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT_moonlander(
-        KC_GRV,  OS_N1,   OS_N2,    OS_N3,   OS_N4,   OS_N5,    _______,           _______, OS_N6,  OS_N7,   OS_N8,   OS_N9,   OS_N0,   KC_BSLS,
-        KC_TAB,  KC_SCLN, KC_COMMA, KC_DOT,  KC_P,    KC_Y,     _______,           _______, KC_F,   KC_G,    KC_C,    KC_R,    KC_L,    KC_SLSH,
-        KC_ESC,  KC_A,    KC_O,     KC_E,    KC_U,    KC_I,     _______,           _______, KC_D,   KC_H,    KC_T,    KC_N,    KC_S,    KC_MINS,
-        KC_LSFT, KC_QUOT, KC_Q,     KC_J,    KC_K,    KC_X,                                 KC_B,   KC_M,    KC_W,    KC_V,    KC_Z,    KC_RSFT,
-        _______,   _______, _______,  _______, _______,           _______,         _______,         _______, _______, _______, _______, _______,
-                                               N_CTBS,  MO(_NAV), _______,         _______, N_ENSY, KC_SPC
+        KC_GRV,  N_1,     N_2,     N_3,     N_4,     N_5,   TG(_GAME),             _______,   N_6,    N_7,     N_8,     N_9,     N_0,     KC_MINS,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,  _______,               _______,   KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+        KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  _______,               _______,   KC_H,   KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                    KC_N,   KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+        _______, _______, _______,  _______, _______,       _______,               _______,           _______, _______, _______, _______, _______,
+                          MT(MOD_LCTL, KC_BSPC),  MO(_NAV), _______,               _______,   LT(_SYM, KC_ENT), KC_SPC
     ),
-    // -- Gaming Layers [START] --
-    [_G_ONE] = LAYOUT_moonlander(
-        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,   XXXXXXX,           XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LALT, KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   XXXXXXX,           XXXXXXX, TG(_G_ONE), XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,   XXXXXXX,           XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,         XXXXXXX,           XXXXXXX,             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                            KC_SPC,  N_TOGT, XXXXXXX,           XXXXXXX, XXXXXXX,    XXXXXXX
+    [_GAME] = LAYOUT_moonlander(
+        KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    _______,           _______, KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    SOCDTOG,           XXXXXXX, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSLS,
+        KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    XXXXXXX,           XXXXXXX, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                                KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,
+        KC_LALT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          KC_ENT,            _______,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+                                            KC_SPC,  KC_LCTL, MO(_NAV),          MO(_SYM), KC_ENT, KC_SPC
     ),
-    [_G_TWO] = LAYOUT_moonlander(
-        KC_ESC,  KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LALT, KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LCTL, KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_LSFT, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,                             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,           XXXXXXX,          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                            XXXXXXX, XXXXXXX, XXXXXXX,           XXXXXXX, XXXXXXX, XXXXXXX
-    ),
-    // -- Gaming Layers [END] --
     [_NAV] = LAYOUT_moonlander(
-        _______, _______, _______, _______, _______, _______, _______,           _______, _______, KC_HOME, _______, KC_END,  _______, _______,
-        _______, _______, _______, G(KC_C), G(KC_V), _______, _______,           _______, KC_TAB,  KC_BSPC, KC_UP,   KC_DEL,  KC_PGUP, _______,
-        _______, N_OGUI,  N_OALT,  N_OSFT,  N_OCTL,  _______, _______,           _______, _______, KC_LEFT, KC_DOWN, KC_RGHT, KC_PGDN, _______,
-        _______, N_HYP,   _______, _______, _______, _______,                             _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, KC_TAB,  KC_BSPC, KC_DEL,  KC_PGUP, _______,
+        _______, N_OGUI,  N_OALT,  N_OSFT,  N_OCTL,  _______, _______,           _______, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_PGDN, KC_ENT,
+        _______, N_HYP,   _______, _______, _______, _______,                             _______, KC_HOME, _______, KC_END,  _______, _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
     [_SYM] = LAYOUT_moonlander(
-        _______, C(KC_1), C(KC_2), C(KC_3), C(KC_4), C(KC_5), _______,           _______, C(KC_6), C(KC_7), C(KC_8), C(KC_9), C(KC_0), KC_DEL,
-        _______, KC_CIRC, KC_DLR,  KC_PERC, KC_LBRC, KC_RBRC, _______,           _______, _______, _______, _______, _______, _______, _______,
-        _______, KC_AT,   KC_HASH, KC_EXLM, KC_LPRN, KC_RPRN, _______,           _______, _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
-        _______, _______, _______, _______, KC_LCBR, KC_RCBR,                             _______, _______, _______, _______, N_HYP,   _______,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, _______, KC_DEL,
+        _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, KC_CIRC, _______, _______, _______, _______, _______,           _______, _______, N_OCTL,  N_OSFT,  N_OALT,  N_OGUI,  _______,
+        _______, _______, _______, _______, _______, _______,                             _______, _______, _______, _______, N_HYP,   _______,
         _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
                                             _______, _______, _______,           _______, _______, _______
     ),
     [_FUN] = LAYOUT_moonlander(
-        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,           _______, KC_F6,      KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-        _______, _______, _______, _______, _______, _______, _______,           _______, TO(_G_ONE), _______, _______, _______, RGB_TOG, KC_F12,
-        _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______,           _______, _______,    _______, _______, _______, _______, _______,
-        _______, _______, _______, KC_VOLD, KC_VOLU, _______,                             _______,    _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______,          _______,           _______,             _______, _______, _______, _______, _______,
-                                            _______, _______, _______,           _______, _______,    _______
+        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   _______,           _______, KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
+        _______, _______, _______, _______, _______, _______, _______,           _______, _______, _______, _______, _______, RGB_TOG, KC_F12,
+        _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, _______,           _______, _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, KC_VOLD, KC_VOLU, _______,                             _______, _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,          _______,           _______,          _______, _______, _______, _______, _______,
+                                            _______, _______, _______,           _______, _______, _______
     ),
 };
 
@@ -180,8 +168,8 @@ bool caps_word_press_user(uint16_t keycode) {
 
 bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case N_CTBS:
-        case N_ENSY:
+        case MT(MOD_LCTL, KC_BSPC):
+        case LT(_SYM, KC_ENT):
             // Immediately select the hold action when another key is tapped.
             return true;
         default:
@@ -192,7 +180,7 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case N_CTBS:
+        case MT(MOD_LCTL, KC_BSPC):
             return TAPPING_TERM - 50;
         default:
             return TAPPING_TERM;
