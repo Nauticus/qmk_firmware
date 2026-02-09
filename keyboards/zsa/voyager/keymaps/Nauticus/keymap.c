@@ -2,6 +2,8 @@
 // Copyright 2023 Christopher Courtney, aka Drashna Jael're  (@drashna) <drashna@live.com>
 // SPDX-License-Identifier: GPL-2.0-or-later
 
+#include "keycodes.h"
+#include "keymap_us.h"
 #include QMK_KEYBOARD_H
 
 // thumb-keys
@@ -84,13 +86,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_SYM] = LAYOUT(
         _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, _______, _______,
         _______, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   _______, _______, _______, _______, _______, _______,
-        _______, KC_MINS, KC_PLUS, KC_LBRC, KC_LCBR, KC_PIPE,                   _______, KC_LCTL, KC_LSFT, KC_LALT, KC_LGUI, _______,
-        _______, KC_DQUO, _______, KC_RBRC, KC_RCBR, KC_CIRC,                   _______, _______, _______, _______, KC_MEH,  _______,
+        _______, KC_CIRC, KC_AMPR, KC_ASTR, KC_MINS, KC_PLUS,                   _______, KC_LCTL, KC_LSFT, KC_LALT, KC_LGUI, _______,
+        _______, _______, _______, _______, _______, _______,                   _______, _______, _______, _______, KC_MEH,  _______,
                                                      _______, _______, _______, _______
     ),
     [_FUN] = LAYOUT(
         _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6,      KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-        _______, _______, _______, _______, _______, _______,                   TO(_GAME), _______, _______, _______,  RGB_M_G, KC_F12,
+        _______, _______, _______, _______, _______, _______,                   TO(_GAME), _______, _______, _______,  UG_TOGG, KC_F12,
         _______, _______, _______, KC_MPRV, KC_MPLY, KC_MNXT,                   _______,    _______, _______, _______, _______, _______,
         _______, _______, _______, KC_VOLD, KC_VOLU, _______,                   _______,    _______, _______, _______, _______, _______,
                                                      _______, _______, _______, _______
